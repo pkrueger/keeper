@@ -1,7 +1,6 @@
 global using System;
 global using System.Data;
 global using System.Collections.Generic;
-global using System.IO;
 global using System.Linq;
 
 global using Microsoft.AspNetCore.Authorization;
@@ -14,3 +13,4 @@ global using CodeWorks.Utils;
 global using keeper.Repositories;
 global using keeper.Services;
 global using keeper.Models;
+global using keeper.Interfaces;
