@@ -6,7 +6,7 @@ namespace keeper.Models
     public string CreatorId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public string CoverImg { get; set; }
+    public string Img { get; set; }
     public bool IsPrivate { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
