@@ -29,5 +29,67 @@ namespace keeper.Controllers
         return BadRequest(e.Message);
       }
     }
+
+    [HttpGet]
+    public ActionResult<List<Keep>> GetAll()
+    {
+      try
+      {
+        List<Keep> keeps = _ks.GetAll();
+        return Ok(keeps);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
+    [HttpGet("{keepId}")]
+    public ActionResult<Keep> GetById(int keepId)
+    {
+      try
+      {
+        Keep keep = _ks.GetById(keepId);
+        return Ok(keep);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
+    [HttpPut("{keepId}")]
+    [Authorize]
+    public async Task<ActionResult<Keep>> Edit(int keepId, [FromBody] Keep keepData)
+    {
+      try
+      {
+        Profile userInfo = await _a0p.GetUserInfoAsync<Profile>(HttpContext);
+        keepData.CreatorId = userInfo.Id;
+        keepData.Id = keepId;
+        Keep keep = _ks.Edit(keepData);
+        return Ok(keep);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
+    [HttpDelete("{keepId}")]
+    [Authorize]
+    public async Task<ActionResult<string>> Delete(int keepId)
+    {
+      try
+      {
+        Profile userInfo = await _a0p.GetUserInfoAsync<Profile>(HttpContext);
+        _ks.Delete(keepId, userInfo.Id);
+        return Ok("Keep has been deleted.");
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
   }
 }

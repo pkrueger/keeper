@@ -16,7 +16,7 @@ CREATE TABLE
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         creatorId VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL,
+        description VARCHAR(1000) NOT NULL,
         coverImg VARCHAR(255) NOT NULL,
         isPrivate BOOLEAN NOT NULL,
         FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
@@ -27,7 +27,7 @@ CREATE TABLE
         id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
         creatorId VARCHAR(255) NOT NULL,
         name VARCHAR(255) NOT NULL,
-        description VARCHAR(255) NOT NULL,
+        description VARCHAR(1000) NOT NULL,
         img VARCHAR(255) NOT NULL,
         views INT DEFAULT 0,
         FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE

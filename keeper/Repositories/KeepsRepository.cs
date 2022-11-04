@@ -27,12 +27,29 @@ namespace keeper.Repositories
 
     public void Delete(int keepId)
     {
-      throw new NotImplementedException();
+      string sql = "DELETE FROM keeps WHERE id = @keepId LIMIT 1;";
+      int rows = _db.Execute(sql, new { keepId });
+      if (rows == 0)
+      {
+        throw new Exception("Keep was not able to be deleted.");
+      }
     }
 
     public List<Keep> Get()
     {
-      throw new NotImplementedException();
+      string sql = @"
+        SELECT 
+          k.*,
+          a.*
+        FROM keeps k
+          JOIN accounts a ON a.id = k.creatorId
+      ;";
+      List<Keep> keeps = _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
+      {
+        keep.Creator = profile;
+        return keep;
+      }).ToList();
+      return keeps;
     }
 
     public Keep GetById(int keepId)
@@ -60,7 +77,18 @@ namespace keeper.Repositories
 
     public Keep Update(Keep keepData)
     {
-      throw new NotImplementedException();
+      string sql = @"
+        UPDATE keeps SET
+          name = @Name,
+          description = @Description
+        WHERE id = @Id LIMIT 1
+      ;";
+      int rows = _db.Execute(sql, keepData);
+      if (rows == 0)
+      {
+        throw new Exception("No changes were saved.");
+      }
+      return GetById(keepData.Id);
     }
   }
 }
