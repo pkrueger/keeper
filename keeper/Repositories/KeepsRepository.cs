@@ -86,7 +86,7 @@ namespace keeper.Repositories
       int rows = _db.Execute(sql, keepData);
       if (rows == 0)
       {
-        throw new Exception("No changes were saved.");
+        throw new Exception("No keep changes were saved.");
       }
       return GetById(keepData.Id);
     }
