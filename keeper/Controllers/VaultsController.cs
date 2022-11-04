@@ -63,5 +63,21 @@ namespace keeper.Controllers
         return BadRequest(e.Message);
       }
     }
+
+    [HttpDelete("{vaultId}")]
+    [Authorize]
+    public async Task<ActionResult<string>> Delete(int vaultId)
+    {
+      try
+      {
+        Profile userInfo = await _a0p.GetUserInfoAsync<Profile>(HttpContext);
+        _vs.Delete(vaultId, userInfo);
+        return Ok("Vault was deleted.");
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
   }
 }

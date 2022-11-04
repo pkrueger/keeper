@@ -41,5 +41,15 @@ namespace keeper.Services
       Vault vault = _vr.Update(originalVault);
       return vault;
     }
+
+    internal void Delete(int vaultId, Profile userInfo)
+    {
+      Vault vault = GetById(vaultId, userInfo);
+      if (vault.CreatorId != userInfo.Id)
+      {
+        throw new Exception("You can't delete a vault that isn't yours.");
+      }
+      _vr.Delete(vaultId);
+    }
   }
 }
