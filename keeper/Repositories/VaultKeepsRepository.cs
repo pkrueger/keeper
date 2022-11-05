@@ -27,7 +27,9 @@ namespace keeper.Repositories
 
     public void Delete(int vaultKeepId)
     {
-      throw new NotImplementedException();
+      string sql = "DELETE FROM vaultKeeps WHERE id = @vaultKeepId LIMIT 1;";
+      int rows = _db.Execute(sql, new { vaultKeepId });
+      if (rows == 0) { throw new Exception("Vault Keep was not able to be deleted."); }
     }
 
     public List<VaultKeep> Get()

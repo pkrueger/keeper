@@ -20,5 +20,21 @@ namespace keeper.Services
       }
       return _vkr.Create(vaultKeepData);
     }
+
+    internal VaultKeep GetById(int vaultKeepId)
+    {
+      VaultKeep vaultKeep = _vkr.GetById(vaultKeepId);
+      return vaultKeep;
+    }
+
+    internal void Delete(int vaultKeepId, Profile userInfo)
+    {
+      VaultKeep vaultKeep = GetById(vaultKeepId);
+      if (vaultKeep.CreatorId != userInfo.Id)
+      {
+        throw new Exception("You can't delete vault keeps that aren't yours.");
+      }
+      _vkr.Delete(vaultKeepId);
+    }
   }
 }
