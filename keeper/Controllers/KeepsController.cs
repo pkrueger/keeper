@@ -50,6 +50,7 @@ namespace keeper.Controllers
       try
       {
         Keep keep = _ks.GetById(keepId);
+        _ks.IncreaseViewCount(keep);
         return Ok(keep);
       }
       catch (Exception e)

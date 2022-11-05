@@ -59,6 +59,12 @@ namespace keeper.Services
       _kr.Delete(keepId);
     }
 
+    internal void IncreaseViewCount(Keep keep)
+    {
+      keep.Views++;
+      _kr.IncreaseViewCount(keep);
+    }
+
     internal List<KeptKeep> GetKeepsByVaultId(int vaultId, Profile userInfo)
     {
       Vault vault = _vs.GetById(vaultId, userInfo);

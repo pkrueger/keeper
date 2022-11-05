@@ -75,6 +75,7 @@ namespace keeper.Repositories
       return keep;
     }
 
+
     internal List<KeptKeep> GetByVaultId(int vaultId)
     {
       string sql = @"
@@ -111,6 +112,13 @@ namespace keeper.Repositories
         throw new Exception("No keep changes were saved.");
       }
       return GetById(keepData.Id);
+    }
+
+    internal void IncreaseViewCount(Keep keep)
+    {
+      string sql = "UPDATE keeps SET views = @Views WHERE id = @Id LIMIT 1";
+      int rows = _db.Execute(sql, keep);
+      if (rows == 0) { throw new Exception("The view count was not updated."); }
     }
   }
 }
