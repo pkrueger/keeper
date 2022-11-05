@@ -12,5 +12,22 @@ namespace keeper.Controllers
       _vks = vks;
       _a0p = a0p;
     }
+
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<VaultKeep>> Create([FromBody] VaultKeep vaultKeepData)
+    {
+      try
+      {
+        Profile userInfo = await _a0p.GetUserInfoAsync<Profile>(HttpContext);
+        vaultKeepData.CreatorId = userInfo.Id;
+        VaultKeep createdVaultKeep = _vks.Create(vaultKeepData, userInfo);
+        return Ok(createdVaultKeep);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
   }
 }
