@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-  <div class="about">
-    <h1>This is the about page</h1>
-  </div>
+  <div class="component"></div>
 </template>
+
+<style lang="scss" scoped></style>
