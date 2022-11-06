@@ -1,15 +1,21 @@
 $themes: (
   default: (
-    "body-bg": #e5e5e5,
-    "primary": #3ba5dc,
-    "secondary": #8392ab,
-    "success": #00f867,
-    "info": #5d0149,
-    "warning": #fbcf33,
-    "danger": #ea0606,
-    "light": #e9ecef,
-    "dark": #111927,
-    "grey": #cbcbcb,
+    "body-bg": #fef6f0,
+    // Dropdown color
+    "primary": #ded6e9,
+    // Navbar hover color
+    "secondary": #e9d8d6,
+    "success": #9ddab7,
+    // Button color
+    "info": #a76bbd,
+    "warning": #f5e094,
+    "danger": #e88383,
+    // Main background color/white text color
+    "light": #fef6f0,
+    // Text color
+    "dark": #2d3436,
+    // Background for edit and create modals
+    "grey": #f9f6fa,
   ),
   dark: (
     "body-bg": #090f18,
@@ -38,5 +44,10 @@ $color-ranges: (
 );
 
 $font-sans-serif: Open Sans;
-$font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-$gradient: linear-gradient(180deg, hsla(0, 0%, 100%, 0.15), hsla(0, 0%, 100%, 0));
+$font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+  "Courier New", monospace;
+$gradient: linear-gradient(
+  180deg,
+  hsla(0, 0%, 100%, 0.15),
+  hsla(0, 0%, 100%, 0)
+);
