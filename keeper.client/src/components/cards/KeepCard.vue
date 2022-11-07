@@ -6,6 +6,7 @@ import { AppState } from "../../AppState.js";
 import { Keep } from "../../models/Keep.js";
 import { keepsService } from "../../services/KeepsService.js";
 import { logger } from "../../utils/Logger.js";
+import Pop from "../../utils/Pop.js";
 
 export default {
   props: {
@@ -21,7 +22,12 @@ export default {
 
     async function deleteKeep(keepId) {
       try {
-        logger.log("Delete", keepId);
+        const decision = await Pop.confirm();
+        if (!decision) {
+          return;
+        }
+        await keepsService.deleteKeep(keepId);
+        Pop.toast("Keep has been deleted.");
       } catch (error) {
         logger.log("[DeleteKeep]", error);
       }

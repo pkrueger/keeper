@@ -47,11 +47,37 @@ public class AccountsRepository
   internal List<Vault> GetVaultsByCreatorId(string creatorId)
   {
     string sql = @"
-      SELECT * FROM vaults
+      SELECT 
+        v.*,
+        a.* 
+      FROM vaults v
+        JOIN accounts a ON a.id = v.creatorId
       WHERE creatorId = @creatorId
     ;";
-    List<Vault> vaults = _db.Query<Vault>(sql, new { creatorId }).ToList();
+    List<Vault> vaults = _db.Query<Vault, Account, Vault>(sql, (vault, account) =>
+    {
+      vault.Creator = account;
+      return vault;
+    }, new { creatorId }).ToList();
     return vaults;
+  }
+
+  internal List<Keep> GetKeepsByCreatorId(string creatorId)
+  {
+    string sql = @"
+      SELECT 
+        k.*,
+        a.* 
+      FROM keeps k
+        JOIN accounts a ON a.id = k.creatorId
+      WHERE creatorId = @creatorId
+    ;";
+    List<Keep> keeps = _db.Query<Keep, Account, Keep>(sql, (keep, account) =>
+    {
+      keep.Creator = account;
+      return keep;
+    }, new { creatorId }).ToList();
+    return keeps;
   }
 }
 

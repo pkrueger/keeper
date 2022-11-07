@@ -53,6 +53,7 @@ export default {
             </div>
             <div class="logged-in">
               <div v-if="state.myVaults.length" class="save-and-remove me-auto">
+                <!-- TODO Write this for submit -->
                 <form @submit="addKeepToVault()">
                   <select
                     class="form-select"

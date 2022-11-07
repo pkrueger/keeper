@@ -1,11 +1,22 @@
 <script>
+import { computed } from "@vue/reactivity";
 import { Modal } from "bootstrap";
+import { reactive } from "vue";
+import { AppState } from "../AppState.js";
 import { logger } from "../utils/Logger.js";
+import Pop from "../utils/Pop.js";
 import Login from "./Login.vue";
 export default {
   setup() {
+    const state = reactive({
+      account: computed(() => AppState.account),
+    });
     function openForm(modalId) {
       try {
+        if (!state.account.id) {
+          Pop.toast("Login to create keeps and vaults.");
+          return;
+        }
         Modal.getOrCreateInstance(modalId).show();
       } catch (error) {
         logger.log("[OpenKeepForm]", error);

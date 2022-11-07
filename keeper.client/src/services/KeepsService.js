@@ -9,6 +9,12 @@ class KeepsService {
     AppState.keeps = res.data.map((k) => new Keep(k));
   }
 
+  async deleteKeep(keepId) {
+    await api.delete(`api/keeps/${keepId}`);
+    AppState.keeps = AppState.keeps.filter((k) => k.id != keepId);
+    AppState.myKeeps = AppState.myKeeps.filter((k) => k.id != keepId);
+  }
+
   async setActiveKeep(keepId) {
     const res = await api.get(`api/keeps/${keepId}`);
     AppState.activeKeep = new Keep(res.data);

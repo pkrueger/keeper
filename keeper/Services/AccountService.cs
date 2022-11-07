@@ -37,4 +37,10 @@ public class AccountService
     List<Vault> vaults = _repo.GetVaultsByCreatorId(creatorId);
     return vaults;
   }
+
+  internal List<Keep> GetMyKeeps(string creatorId)
+  {
+    List<Keep> keeps = _repo.GetKeepsByCreatorId(creatorId);
+    return keeps;
+  }
 }
