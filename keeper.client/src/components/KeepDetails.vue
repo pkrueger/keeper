@@ -1,5 +1,6 @@
 <script>
 import { computed, ref } from "@vue/reactivity";
+import { Modal } from "bootstrap";
 import { reactive } from "vue";
 import { AppState } from "../AppState.js";
 
@@ -9,8 +10,12 @@ export default {
       keep: computed(() => AppState.activeKeep),
       myVaults: computed(() => AppState.myVaults),
     });
+
+    function dismissModal() {
+      Modal.getOrCreateInstance("#keepDetailsModal").hide();
+    }
     const editable = ref({});
-    return { state, editable };
+    return { state, editable, dismissModal };
   },
 };
 </script>
@@ -43,7 +48,7 @@ export default {
               <!-- TODO Make a delete button for keep outline danger -->
             </div>
             <div class="keep-info text-dark">
-              <h1>{{ state.keep?.name }}</h1>
+              <h1 id="keepDetailsModalLabel">{{ state.keep?.name }}</h1>
               <div class="opacity">{{ state.keep?.description }}</div>
             </div>
             <div class="logged-in">
@@ -59,21 +64,28 @@ export default {
                       {{ v.name }}
                     </option>
                   </select>
-                  <button type="submit" class="btn btn-info">Save</button>
+                  <button type="submit" class="btn btn-info">save</button>
                 </form>
               </div>
-              <!-- TODO Make a router link to profile page -->
-              <div class="account-info">
-                <img
-                  :src="state.keep?.creator.picture"
-                  :alt="state.keep?.creator.name"
-                  :title="state.keep?.creator.name"
-                  class="rounded-circle elevation-3 img-fluid"
-                />
-                <div class="text-dark opacity">
-                  {{ state.keep?.creator.name }}
+              <router-link
+                @click="dismissModal()"
+                :to="{
+                  name: 'Profile',
+                  params: { profileId: state.keep?.creatorId },
+                }"
+              >
+                <div class="account-info">
+                  <img
+                    :src="state.keep?.creator.picture"
+                    :alt="state.keep?.creator.name"
+                    :title="state.keep?.creator.name"
+                    class="rounded-circle elevation-3 img-fluid"
+                  />
+                  <div class="text-dark opacity">
+                    {{ state.keep?.creator.name }}
+                  </div>
                 </div>
-              </div>
+              </router-link>
             </div>
           </div>
           <i

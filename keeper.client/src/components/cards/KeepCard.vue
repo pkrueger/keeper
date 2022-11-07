@@ -109,6 +109,7 @@ export default {
       border-radius: 0.25rem;
       padding-inline: 0.5rem;
       overflow: hidden;
+      max-width: 75%;
       .card-text {
         font-size: 1.5rem;
         text-shadow: 0.15rem 0.15rem 0 rgba(0, 0, 0, 0.5);

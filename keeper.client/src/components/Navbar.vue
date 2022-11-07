@@ -1,8 +1,17 @@
 <script>
+import { Modal } from "bootstrap";
+import { logger } from "../utils/Logger.js";
 import Login from "./Login.vue";
 export default {
   setup() {
-    return {};
+    function openForm(modalId) {
+      try {
+        Modal.getOrCreateInstance(modalId).show();
+      } catch (error) {
+        logger.log("[OpenKeepForm]", error);
+      }
+    }
+    return { openForm };
   },
   components: { Login },
 };
@@ -14,10 +23,16 @@ export default {
       <button class="btn btn-outline bg-secondary text-dark elevation-2">
         Home
       </button>
-      <button class="btn btn-outline bg-secondary text-dark elevation-2">
+      <button
+        @click="openForm('#createKeepModal')"
+        class="btn btn-outline bg-secondary text-dark elevation-2"
+      >
         Create Keep
       </button>
-      <button class="btn btn-outline bg-secondary text-dark elevation-2">
+      <button
+        @click="openForm('#createVaultModal')"
+        class="btn btn-outline bg-secondary text-dark elevation-2"
+      >
         Create Vault
       </button>
     </div>
@@ -63,6 +78,7 @@ a:hover {
   right: 0;
   margin: auto;
   text-align: center;
+  width: fit-content;
 }
 
 .logo {

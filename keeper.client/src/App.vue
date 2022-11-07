@@ -1,6 +1,8 @@
 <script>
 import { computed } from "vue";
 import { AppState } from "./AppState";
+import KeepForm from "./components/forms/KeepForm.vue";
+import VaultForm from "./components/forms/VaultForm.vue";
 import KeepDetails from "./components/KeepDetails.vue";
 import Navbar from "./components/Navbar.vue";
 
@@ -10,7 +12,7 @@ export default {
       appState: computed(() => AppState),
     };
   },
-  components: { Navbar, KeepDetails },
+  components: { Navbar, KeepDetails, KeepForm, VaultForm },
 };
 </script>
 
@@ -23,6 +25,8 @@ export default {
   </main>
   <footer class="bg-dark text-light">Made with 💖 by CodeWorks</footer>
   <KeepDetails />
+  <KeepForm />
+  <VaultForm />
 </template>
 
 <style lang="scss">
