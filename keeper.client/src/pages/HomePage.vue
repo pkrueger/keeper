@@ -1,46 +1,64 @@
 <script>
+import { computed } from "@vue/reactivity";
+import { onMounted, reactive } from "vue";
+import { AppState } from "../AppState.js";
+import KeepCard from "../components/cards/KeepCard.vue";
+import { keepsService } from "../services/KeepsService.js";
+import { logger } from "../utils/Logger.js";
+
 export default {
   setup() {
-    return {};
+    const state = reactive({
+      keeps: computed(() => AppState.keeps),
+    });
+    async function getAllKeeps() {
+      try {
+        await keepsService.getAllKeeps();
+      } catch (error) {
+        logger.log("[GetAllKeeps]", error);
+      }
+    }
+    onMounted(() => {
+      getAllKeeps();
+    });
+    return { state };
   },
+  components: { KeepCard },
 };
 </script>
 
 <template>
-  <div
-    class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center"
-  >
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img
-        src="https://bcw.blob.core.windows.net/public/img/8600856373152463"
-        alt="CodeWorks Logo"
-        class="rounded-circle"
-      />
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
-    </div>
+  <div class="masonry">
+    <KeepCard
+      v-for="k in state.keeps"
+      :key="k.id"
+      :keep="k"
+      class="keep-card-comp"
+    />
   </div>
 </template>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
+.masonry {
+  columns: 4;
+  column-gap: 2.25rem;
+  padding: 5rem;
 
-  .home-card {
-    width: 50vw;
+  .keep-card-comp {
+    margin-bottom: 2.25rem;
+  }
+}
 
-    > img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
+@media (max-width: 1100px) {
+  .masonry {
+    columns: 3;
+  }
+}
+
+@media (max-width: 850px) {
+  .masonry {
+    columns: 2;
+    padding: 5rem 2rem;
   }
 }
 </style>

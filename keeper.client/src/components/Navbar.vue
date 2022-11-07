@@ -30,7 +30,7 @@ export default {
 <style scoped lang="scss">
 @import "../assets/scss/main.scss";
 .navbar {
-  box-shadow: rgba(0, 0, 0, 0.45) 0 1.56rem 1.25rem -1.25rem;
+  box-shadow: #2d343635 0 1.56rem 1.25rem -1.25rem;
   position: relative;
 }
 
