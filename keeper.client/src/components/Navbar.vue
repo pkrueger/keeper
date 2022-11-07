@@ -9,34 +9,36 @@ export default {
 </script>
 
 <template>
-  <nav class="navbar navbar-expand-lg bg-light px-3">
-    <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
-      <div class="d-flex flex-column align-items-center">
-        <img alt="logo" src="../assets/img/cw-logo.png" height="45" />
-      </div>
-    </router-link>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarText"
-      aria-controls="navbarText"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav me-auto">
-        <li></li>
-      </ul>
-      <!-- LOGIN COMPONENT HERE -->
-      <Login />
+  <nav class="navbar bg-light px-5">
+    <div class="nav-buttons">
+      <button class="btn btn-outline bg-secondary text-dark">Home</button>
+      <button class="btn btn-outline bg-secondary text-dark">
+        Create Keep
+      </button>
+      <button class="btn btn-outline bg-secondary text-dark">
+        Create Vault
+      </button>
     </div>
+    <router-link class="navbar-brand" :to="{ name: 'Home' }">
+      <img alt="logo" src="logo.png" class="logo" />
+    </router-link>
+    <!-- LOGIN COMPONENT HERE -->
+    <Login />
   </nav>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../assets/scss/main.scss";
+.navbar {
+  box-shadow: rgba(0, 0, 0, 0.45) 0 1.56rem 1.25rem -1.25rem;
+  position: relative;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1.5rem;
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -51,9 +53,23 @@ a:hover {
   border-bottom-right-radius: 0;
 }
 
+.navbar-brand {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  margin: auto;
+  text-align: center;
+}
+
+.logo {
+  height: 4rem;
+}
+
 @media screen and (min-width: 768px) {
   nav {
-    height: 64px;
+    height: 6.4rem;
   }
 }
 </style>

@@ -21,7 +21,7 @@ export default {
 <template>
   <span class="navbar-text">
     <button
-      class="btn selectable text-success lighten-30 text-uppercase my-2 my-lg-0"
+      class="btn selectable text-dark text-uppercase my-2 my-lg-0"
       @click="login"
       v-if="!user.isAuthenticated"
     >
@@ -31,16 +31,15 @@ export default {
       <div class="dropdown dropstart my-2 my-lg-0">
         <div
           type="button"
-          class="bg-dark border-0 selectable no-select"
+          class="border-0 selectable no-select"
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <div v-if="account.picture || user.picture">
+          <div v-if="account.picture || user.picture" class="picture-container">
             <img
               :src="account.picture || user.picture"
               alt="account photo"
-              height="40"
-              class="rounded"
+              class="picture"
             />
           </div>
         </div>
@@ -68,4 +67,16 @@ export default {
   </span>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.picture-container {
+  border-radius: 50%;
+  overflow: hidden;
+  .picture {
+    object-fit: cover;
+    object-position: center;
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+  }
+}
+</style>
