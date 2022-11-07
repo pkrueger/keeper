@@ -58,7 +58,12 @@ export default {
 @media (max-width: 850px) {
   .masonry {
     columns: 2;
-    padding: 5rem 2rem;
+    column-gap: 1rem;
+    padding: 5rem 1rem;
+
+    .keep-card-comp {
+      margin-bottom: 1rem;
+    }
   }
 }
 </style>

@@ -39,7 +39,7 @@ export default {
             <img
               :src="account.picture || user.picture"
               alt="account photo"
-              class="picture"
+              class="picture elevation-4"
             />
           </div>
         </div>
@@ -70,13 +70,13 @@ export default {
 <style lang="scss" scoped>
 .picture-container {
   border-radius: 50%;
-  overflow: hidden;
   .picture {
     object-fit: cover;
     object-position: center;
     height: 4rem;
     width: 4rem;
     border-radius: 50%;
+    // box-shadow: rgba(45, 52, 54, 0.6) 0 0.3rem 1rem 0;
   }
 }
 </style>

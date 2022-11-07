@@ -11,11 +11,13 @@ export default {
 <template>
   <nav class="navbar bg-light px-5">
     <div class="nav-buttons">
-      <button class="btn btn-outline bg-secondary text-dark">Home</button>
-      <button class="btn btn-outline bg-secondary text-dark">
+      <button class="btn btn-outline bg-secondary text-dark elevation-2">
+        Home
+      </button>
+      <button class="btn btn-outline bg-secondary text-dark elevation-2">
         Create Keep
       </button>
-      <button class="btn btn-outline bg-secondary text-dark">
+      <button class="btn btn-outline bg-secondary text-dark elevation-2">
         Create Vault
       </button>
     </div>

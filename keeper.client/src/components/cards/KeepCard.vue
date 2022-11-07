@@ -1,4 +1,7 @@
 <script>
+import { computed } from "@vue/reactivity";
+import { reactive } from "vue";
+import { AppState } from "../../AppState.js";
 import { Keep } from "../../models/Keep.js";
 
 export default {
@@ -9,7 +12,10 @@ export default {
     },
   },
   setup() {
-    return {};
+    const state = reactive({
+      account: computed(() => AppState.account),
+    });
+    return { state };
   },
 };
 </script>
@@ -20,13 +26,16 @@ export default {
     <div class="card-content">
       <!-- TODO No wrap and make ellipses appear on overflow -->
       <!-- TODO Make transparent glass -->
-      <div class="text-light">{{ keep.name }}</div>
+      <div class="text-container">
+        <div class="card-text text-light">{{ keep.name }}</div>
+      </div>
       <!-- TODO No image on mobile size -->
       <img
+        v-if="keep.creatorId != state.account.id"
         :src="keep.creator.picture"
         :alt="keep.creator.name"
         :title="keep.creator.name"
-        class="rounded-circle"
+        class="rounded-circle elevation-3"
       />
     </div>
   </div>
@@ -52,16 +61,43 @@ export default {
     bottom: 0;
     width: 100%;
     padding: 1rem;
-
-    div {
-      font-size: 1.5rem;
-      text-shadow: 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.2);
+    height: 5.2rem;
+    .text-container {
+      background-color: rgba(45, 52, 54, 0.55);
+      backdrop-filter: blur(7px);
+      border-radius: 0.25rem;
+      padding-inline: 0.5rem;
+      overflow: hidden;
+      .card-text {
+        font-size: 1.5rem;
+        text-shadow: 0.15rem 0.15rem 0 rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.05rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
 
     img {
       margin-inline-start: auto;
       width: 20%;
       max-width: 4rem;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .card-content {
+      height: 3rem;
+
+      .text-container {
+        .card-text {
+          font-size: 1.1rem;
+        }
+      }
+
+      img {
+        display: none;
+      }
     }
   }
 }
