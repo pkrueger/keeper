@@ -109,9 +109,14 @@ export default {
     width: 100%;
     padding: 1rem;
     height: 5.2rem;
+    border-radius: 0.5rem;
+    background: rgb(45, 52, 54);
+    background: linear-gradient(
+      0deg,
+      rgba(45, 52, 54, 0.85) 0%,
+      rgba(45, 52, 54, 0) 100%
+    );
     .text-container {
-      background-color: rgba(45, 52, 54, 0.55);
-      backdrop-filter: blur(7px);
       border-radius: 0.25rem;
       padding-inline: 0.5rem;
       overflow: hidden;
