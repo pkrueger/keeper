@@ -51,7 +51,7 @@ export default {
               <input
                 type="text"
                 minlength="1"
-                maxlength="40"
+                maxlength="20"
                 class="form-control text-dark bg-grey"
                 id="vaultName"
                 placeholder="Name..."
