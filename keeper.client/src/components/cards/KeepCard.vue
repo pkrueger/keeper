@@ -123,6 +123,7 @@ export default {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-family: "Marko One", serif;
       }
     }
 

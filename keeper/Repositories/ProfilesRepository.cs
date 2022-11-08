@@ -37,20 +37,36 @@ namespace keeper.Repositories
     internal List<Keep> GetKeepsByCreatorId(string profileId)
     {
       string sql = @"
-        SELECT * FROM keeps
+        SELECT 
+          k.*,
+          a.* 
+        FROM keeps k
+          JOIN accounts a ON a.id = k.creatorId
         WHERE creatorId = @profileId
       ;";
-      List<Keep> keeps = _db.Query<Keep>(sql, new { profileId }).ToList();
+      List<Keep> keeps = _db.Query<Keep, Profile, Keep>(sql, (keep, profile) =>
+      {
+        keep.Creator = profile;
+        return keep;
+      }, new { profileId }).ToList();
       return keeps;
     }
 
     internal List<Vault> GetVaultsByCreatorId(string profileId)
     {
       string sql = @"
-        SELECT * FROM vaults
+        SELECT 
+          v.*,
+          a.* 
+        FROM vaults v
+          JOIN accounts a ON a.id = v.creatorId
         WHERE creatorId = @profileId AND isPrivate = false
       ;";
-      List<Vault> vaults = _db.Query<Vault>(sql, new { profileId }).ToList();
+      List<Vault> vaults = _db.Query<Vault, Profile, Vault>(sql, (vault, profile) =>
+      {
+        vault.Creator = profile;
+        return vault;
+      }, new { profileId }).ToList();
       return vaults;
     }
 

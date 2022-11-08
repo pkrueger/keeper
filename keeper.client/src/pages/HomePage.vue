@@ -41,11 +41,11 @@ export default {
 <style scoped lang="scss">
 .masonry {
   columns: 4;
-  column-gap: 2.25rem;
+  column-gap: 1.5rem;
   padding: 5rem;
 
   .keep-card-comp {
-    margin-bottom: 2.25rem;
+    margin-bottom: 1.5rem;
   }
 }
 
