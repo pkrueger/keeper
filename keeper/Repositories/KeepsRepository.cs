@@ -98,6 +98,28 @@ namespace keeper.Repositories
       return keptKeeps;
     }
 
+    internal KeptKeep GetKeptKeepById(int vaultKeepId)
+    {
+      string sql = @"
+        SELECT
+          k.*,
+          vk.id AS VaultKeepId,
+          vk.creatorId AS KeeperId,
+          vk.vaultId,
+          a.*
+        FROM vaultKeeps vk
+          JOIN keeps k ON k.id = vk.keepId
+          JOIN accounts a ON a.id = k.creatorId
+        WHERE vk.id = @vaultKeepId 
+      ;";
+      KeptKeep keptKeep = _db.Query<KeptKeep, Profile, KeptKeep>(sql, (keep, profile) =>
+      {
+        keep.Creator = profile;
+        return keep;
+      }, new { vaultKeepId }).FirstOrDefault();
+      return keptKeep;
+    }
+
     public Keep Update(Keep keepData)
     {
       string sql = @"

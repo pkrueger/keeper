@@ -15,11 +15,13 @@ export default {
 </script>
 
 <template>
-  <div class="vault-card" :style="`background-image: url(${vault.img})`">
-    <div class="gradient d-flex align-items-end">
-      <div class="vault-name text-light">{{ vault.name }}</div>
+  <router-link :to="{ name: 'Vault', params: { vaultId: vault.id } }">
+    <div class="vault-card" :style="`background-image: url(${vault.img})`">
+      <div class="gradient d-flex align-items-end">
+        <div class="vault-name text-light">{{ vault.name }}</div>
+      </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <style lang="scss" scoped>

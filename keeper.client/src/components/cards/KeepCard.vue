@@ -4,6 +4,7 @@ import { Modal } from "bootstrap";
 import { reactive } from "vue";
 import { AppState } from "../../AppState.js";
 import { Keep } from "../../models/Keep.js";
+import { KeptKeep } from "../../models/KeptKeep.js";
 import { keepsService } from "../../services/KeepsService.js";
 import { logger } from "../../utils/Logger.js";
 import Pop from "../../utils/Pop.js";
@@ -11,7 +12,7 @@ import Pop from "../../utils/Pop.js";
 export default {
   props: {
     keep: {
-      type: Keep,
+      type: [KeptKeep, Keep],
       required: true,
     },
   },
@@ -41,9 +42,21 @@ export default {
       }
     }
 
-    async function openKeepDetails(keepId) {
+    async function setActiveKeptKeep(keep) {
       try {
-        await setActiveKeep(keepId);
+        await keepsService.setActiveKeptKeep(keep);
+      } catch (error) {
+        logger.log("[SetActiveKeptKeep]", error);
+      }
+    }
+
+    async function openKeepDetails(keep) {
+      try {
+        if (keep.vaultKeepId) {
+          await setActiveKeptKeep(keep);
+        } else {
+          await setActiveKeep(keep.id);
+        }
         Modal.getOrCreateInstance("#keepDetailsModal").show();
       } catch (error) {
         logger.log("[OpenKeepDetails]", error);
@@ -61,12 +74,12 @@ export default {
     :style="`background-image: url(${keep.img})`"
   >
     <img
-      @click="openKeepDetails(keep.id)"
+      @click="openKeepDetails(keep)"
       :src="keep.img"
       :alt="keep.name"
       class="keep-card-image"
     />
-    <div @click="openKeepDetails(keep.id)" class="card-content">
+    <div @click="openKeepDetails(keep)" class="card-content">
       <div class="text-container no-select">
         <div class="card-text text-light">{{ keep.name }}</div>
       </div>

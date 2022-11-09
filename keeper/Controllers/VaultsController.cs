@@ -63,6 +63,21 @@ namespace keeper.Controllers
       }
     }
 
+    [HttpGet("{vaultId}/keeps/{vaultKeepId}")]
+    public async Task<ActionResult<KeptKeep>> GetKeptKeepById(int vaultId, int vaultKeepId)
+    {
+      try
+      {
+        Profile userInfo = await _a0p.GetUserInfoAsync<Profile>(HttpContext);
+        KeptKeep keptKeep = _ks.GetKeptKeepById(vaultKeepId, vaultId, userInfo);
+        return Ok(keptKeep);
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }
+
     [HttpPut("{vaultId}")]
     [Authorize]
     public async Task<ActionResult<Vault>> Edit(int vaultId, [FromBody] Vault vaultData)

@@ -45,7 +45,6 @@ class AccountService {
     AppState.activeProfile = null;
     AppState.profileKeeps = [];
     AppState.profileVaults = [];
-    console.log("test");
   }
 }
 

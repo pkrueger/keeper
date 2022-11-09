@@ -71,5 +71,12 @@ namespace keeper.Services
       List<KeptKeep> keptKeeps = _kr.GetByVaultId(vaultId);
       return keptKeeps;
     }
+
+    internal KeptKeep GetKeptKeepById(int vaultKeepId, int vaultId, Profile userInfo)
+    {
+      Vault vault = _vs.GetById(vaultId, userInfo);
+      KeptKeep keptKeep = _kr.GetKeptKeepById(vaultKeepId);
+      return keptKeep;
+    }
   }
 }
