@@ -4,6 +4,7 @@ import { Modal } from "bootstrap";
 import { onMounted, reactive } from "vue";
 import { AppState } from "../AppState.js";
 import { keepsService } from "../services/KeepsService.js";
+import { keptKeepsService } from "../services/KeptKeepsService.js";
 import { logger } from "../utils/Logger.js";
 import Pop from "../utils/Pop.js";
 
@@ -30,7 +31,7 @@ export default {
         if (!decision) {
           return;
         }
-        await keepsService.deleteKeptKeep(vaultKeepId);
+        await keptKeepsService.deleteKeptKeep(vaultKeepId);
         dismissModal();
       } catch (error) {
         logger.log("[DeleteKeptKeep]", error);
@@ -39,7 +40,32 @@ export default {
 
     async function addKeepToVault(keepId) {
       try {
-      } catch (error) {}
+        await keptKeepsService.getKeptKeeps(editable.value.vaultId);
+        if (AppState.keptKeeps.find((k) => k.id == keepId)) {
+          Pop.error("This keep is already in the selected vault.");
+          AppState.keptKeeps = [];
+          return;
+        }
+        await keptKeepsService.addKeepToVault(keepId, editable.value.vaultId);
+        Pop.success("Successfully added to vault.");
+        editable.value = {};
+      } catch (error) {
+        logger.log("[AddKeepToVault]", error);
+      }
+    }
+
+    async function deleteKeep(keepId) {
+      try {
+        const decision = await Pop.confirm();
+        if (!decision) {
+          return;
+        }
+        await keepsService.deleteKeep(keepId);
+        Pop.toast("Keep has been deleted.");
+        dismissModal();
+      } catch (error) {
+        logger.log("[DeleteKeep]", error);
+      }
     }
 
     onMounted(() => {
@@ -50,7 +76,14 @@ export default {
     });
 
     const editable = ref({});
-    return { state, editable, dismissModal, deleteKeptKeep, addKeepToVault };
+    return {
+      state,
+      editable,
+      dismissModal,
+      deleteKeptKeep,
+      addKeepToVault,
+      deleteKeep,
+    };
   },
 };
 </script>
@@ -71,16 +104,28 @@ export default {
             <img :src="state.keep.img" :alt="state.keep.name" class="image" />
           </div>
           <div class="keep-content">
-            <div class="trackers opacity">
-              <span title="Views" class=""
-                ><i class="fa-solid fa-eye text-dark"></i>
-                {{ state.keep.views }}</span
+            <div class="text-center">
+              <button
+                class="btn text-danger mb-2"
+                @click="deleteKeep(state.keep.id)"
+                v-if="
+                  state.keep.creatorId == state.account.id &&
+                  $route.name == 'Account'
+                "
               >
-              |
-              <span title="Keeps" class=""
-                ><i class="fa-solid fa-k text-dark"></i>
-                {{ state.keep.kept }}</span
-              >
+                Delete
+              </button>
+              <div class="trackers opacity">
+                <span title="Views" class=""
+                  ><i class="fa-solid fa-eye text-dark"></i>
+                  {{ state.keep.views }}</span
+                >
+                |
+                <span title="Keeps" class=""
+                  ><i class="fa-solid fa-k text-dark"></i>
+                  {{ state.keep.kept }}</span
+                >
+              </div>
             </div>
 
             <div class="keep-info text-dark">
@@ -96,9 +141,12 @@ export default {
                 v-if="state.myVaults.length && !state.keep.vaultKeepId"
                 class="save-and-remove me-auto"
               >
-                <form @submit="addKeepToVault(state.keep.id)">
+                <form
+                  @submit.prevent="addKeepToVault(state.keep.id)"
+                  class="d-flex gap-2"
+                >
                   <select
-                    class="form-select"
+                    class="form-select w-50"
                     aria-label="Vault select"
                     v-model="editable.vaultId"
                   >
@@ -155,7 +203,7 @@ export default {
             </div>
           </div>
           <i
-            class="fa-solid fa-minus text-dark opacity selectable close"
+            class="fa-solid fa-minus opacity selectable close"
             data-bs-dismiss="modal"
             title="Close"
             aria-label="Close"
@@ -240,6 +288,33 @@ export default {
     top: 0;
     right: 0;
     margin: 0.3rem 0.5rem;
+    color: #2d3436;
+  }
+}
+@media (max-width: 850px) {
+  .modal-body {
+    grid-template-columns: repeat(1, 1fr);
+    .image-container {
+      .image {
+        height: 50vh;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0.4rem;
+        border-top-right-radius: 0.4rem;
+      }
+    }
+    .keep-content {
+      padding: 2rem 2.5rem;
+      .trackers {
+        margin-bottom: 0.5rem;
+      }
+      .keep-info {
+        margin-bottom: 1rem;
+      }
+    }
+    .close {
+      color: #fef6f0;
+      text-shadow: 0 0 0.2rem rgba(0, 0, 0, 1);
+    }
   }
 }
 </style>

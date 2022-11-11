@@ -1,24 +1,28 @@
 <script>
 import { computed } from "@vue/reactivity";
-import { onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { onMounted, onUnmounted, reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { AppState } from "../AppState.js";
 import KeepCard from "../components/cards/KeepCard.vue";
 import { keepsService } from "../services/KeepsService.js";
+import { keptKeepsService } from "../services/KeptKeepsService.js";
 import { vaultsService } from "../services/VaultsService.js";
 import { logger } from "../utils/Logger.js";
+import Pop from "../utils/Pop.js";
 
 export default {
   setup() {
     const state = reactive({
       keptKeeps: computed(() => AppState.keptKeeps),
       vault: computed(() => AppState.activeVault),
+      account: computed(() => AppState.account),
     });
     const route = useRoute();
+    const router = useRouter();
 
     async function getKeptKeeps() {
       try {
-        await keepsService.getKeptKeeps(route.params.vaultId);
+        await keptKeepsService.getKeptKeeps(route.params.vaultId);
       } catch (error) {
         logger.log("[GetKeptKeeps]", error);
       }
@@ -32,21 +36,54 @@ export default {
       }
     }
 
-    onMounted(() => {
-      getVaultById();
-      getKeptKeeps();
+    async function deleteVault(vaultId) {
+      try {
+        const decision = await Pop.confirm();
+        if (!decision) {
+          return;
+        }
+        await vaultsService.deleteVault(vaultId);
+        Pop.success("Vault has been deleted.");
+        router.push({
+          name: "Profile",
+          params: { profileId: state.vault.creatorId },
+        });
+      } catch (error) {
+        logger.log("[DeleteVault]");
+      }
+    }
+
+    function redirect() {
+      try {
+        if (!state.vault) {
+          Pop.toast("You can't access that private vault.");
+          router.push({ name: "Home" });
+        }
+      } catch (error) {
+        logger.log("[Redirect]", error);
+      }
+    }
+
+    onMounted(async () => {
+      await getVaultById();
+      await getKeptKeeps();
+      redirect();
     });
-    return { state };
+
+    onUnmounted(() => {
+      vaultsService.clearVariables();
+    });
+    return { state, deleteVault };
   },
   components: { KeepCard },
 };
 </script>
 
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="state.vault">
     <div class="row justify-content-center">
       <div
-        class="col-md-5 d-flex flex-column justify-content-center align-items-center"
+        class="col-md-8 col-lg-5 d-flex flex-column justify-content-center align-items-center"
       >
         <div
           class="image-wrapper text-center text-light"
@@ -56,6 +93,31 @@ export default {
           <div class="vault-text text-center mb-2">
             <h1 class="vault-name">{{ state.vault?.name }}</h1>
             <h3 class="vault-creator">by {{ state.vault?.creator.name }}</h3>
+          </div>
+          <i
+            class="fa-solid fa-lock private text-light"
+            title="Private Vault"
+            v-if="state.vault.isPrivate"
+          ></i>
+          <div
+            class="dropdown"
+            v-if="state.account?.id == state.vault.creatorId"
+          >
+            <i
+              class="fa-solid fa-ellipsis menu text-dark selectable"
+              title="Vault Options"
+              aria-label="Vault Options"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            ></i>
+            <ul class="dropdown-menu bg-primary">
+              <li
+                class="selectable text-dark"
+                @click="deleteVault(state.vault.id)"
+              >
+                &nbspDelete Vault
+              </li>
+            </ul>
           </div>
         </div>
         <div class="keep-count bg-primary">
@@ -83,12 +145,12 @@ export default {
 
 <style lang="scss" scoped>
 .container-fluid {
-  padding: 5rem 0.75rem;
+  padding-block: 10rem;
   .image-wrapper {
     position: relative;
     margin-bottom: 1.5rem;
     width: 100%;
-    padding-top: 40%;
+    padding-top: 50%;
     border-radius: 0.5rem;
     background-size: cover;
     background-position: center;
@@ -128,8 +190,27 @@ export default {
         rgba(45, 52, 54, 0) 60%
       );
     }
-  }
+    .private {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 1.5rem;
+      padding: 0.35rem 0.45rem;
+      text-shadow: 0 0 0.21rem rgba(0, 0, 0, 0.8);
+    }
+    .dropdown {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      transform: translateY(125%);
+      padding-inline: 2%;
 
+      .menu {
+        padding: 0 0.25rem;
+        font-size: 1.5rem;
+      }
+    }
+  }
   .keep-count {
     font-weight: 600;
     font-size: 1.25rem;
@@ -155,6 +236,10 @@ export default {
 }
 
 @media (max-width: 850px) {
+  .container-fluid {
+    padding-block: 1rem;
+  }
+
   .masonry {
     columns: 2;
     column-gap: 1rem;

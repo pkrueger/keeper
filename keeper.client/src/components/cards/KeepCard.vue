@@ -6,6 +6,7 @@ import { AppState } from "../../AppState.js";
 import { Keep } from "../../models/Keep.js";
 import { KeptKeep } from "../../models/KeptKeep.js";
 import { keepsService } from "../../services/KeepsService.js";
+import { keptKeepsService } from "../../services/KeptKeepsService.js";
 import { logger } from "../../utils/Logger.js";
 import Pop from "../../utils/Pop.js";
 
@@ -44,7 +45,7 @@ export default {
 
     async function setActiveKeptKeep(keep) {
       try {
-        await keepsService.setActiveKeptKeep(keep);
+        await keptKeepsService.setActiveKeptKeep(keep);
       } catch (error) {
         logger.log("[SetActiveKeptKeep]", error);
       }
@@ -92,7 +93,7 @@ export default {
       />
     </div>
     <i
-      v-if="keep.creatorId == state.account.id"
+      v-if="keep.creatorId == state.account.id && $route.name == 'Account'"
       @click="deleteKeep(keep.id)"
       class="fa-solid fa-delete-left delete-icon text-danger selectable"
       title="Delete"
@@ -159,7 +160,7 @@ export default {
     margin: 0.3rem 0.5rem;
   }
 
-  @media (max-width: 550px) {
+  @media (max-width: 850px) {
     .card-content {
       height: 3rem;
 

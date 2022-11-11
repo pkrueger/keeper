@@ -83,7 +83,7 @@ export default {
 
 <style lang="scss" scoped>
 .container-fluid {
-  padding: 5rem 0.75rem;
+  padding: 10rem 0.75rem;
   .image-wrapper {
     position: relative;
     margin-bottom: 5rem;
@@ -101,6 +101,9 @@ export default {
       bottom: 0;
       left: 0;
       right: 0;
+      width: 8rem;
+      height: 8rem;
+      object-fit: cover;
       margin-inline: auto;
       transform: translateY(55%);
       outline: 0.1rem solid var(--bs-light);
@@ -169,6 +172,12 @@ export default {
         margin-bottom: 1rem;
       }
     }
+  }
+}
+
+@media (max-width: 850px) {
+  .container-fluid {
+    padding: 1rem 0.75rem;
   }
 }
 </style>

@@ -13,6 +13,15 @@ class VaultsService {
     const res = await api.get(`api/vaults/${vaultId}`);
     AppState.activeVault = new Vault(res.data);
   }
+
+  async deleteVault(vaultId) {
+    await api.delete(`api/vaults/${vaultId}`);
+  }
+
+  clearVariables() {
+    AppState.activeVault = null;
+    AppState.keptKeeps = [];
+  }
 }
 
 export const vaultsService = new VaultsService();

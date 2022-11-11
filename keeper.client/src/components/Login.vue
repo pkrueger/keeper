@@ -1,12 +1,23 @@
 <script>
+import { Modal } from "bootstrap";
 import { computed } from "vue";
 import { AppState } from "../AppState";
 import { AuthService } from "../services/AuthService";
+import { logger } from "../utils/Logger.js";
 export default {
   setup() {
+    function openForm(modalId) {
+      try {
+        Modal.getOrCreateInstance(modalId).show();
+      } catch (error) {
+        logger.log("[OpenKeepForm]", error);
+      }
+    }
+
     return {
       user: computed(() => AppState.user),
       account: computed(() => AppState.account),
+      openForm,
       async login() {
         AuthService.loginWithPopup();
       },
@@ -21,7 +32,7 @@ export default {
 </script>
 
 <template>
-  <span class="navbar-text">
+  <span class="navbar-text p-0">
     <button
       class="btn selectable text-dark text-uppercase my-2 my-lg-0"
       @click="login"
@@ -30,7 +41,7 @@ export default {
       Login
     </button>
     <div v-else>
-      <div class="dropdown dropstart my-2 my-lg-0">
+      <div class="dropstart my-2 my-lg-0">
         <div
           type="button"
           class="border-0 selectable no-select"
@@ -45,18 +56,21 @@ export default {
             />
           </div>
         </div>
-        <div
-          class="dropdown-menu dropdown-menu-lg-left p-0"
-          aria-labelledby="authDropdown"
-        >
-          <div class="list-group">
+        <div class="dropdown-menu p-0" aria-labelledby="authDropdown">
+          <div class="list-group d-flex">
             <router-link :to="{ name: 'Account' }">
               <div class="list-group-item dropdown-item list-group-item-action">
-                Manage Account
+                Account Page
               </div>
             </router-link>
             <div
-              class="list-group-item dropdown-item list-group-item-action text-danger selectable"
+              @click="openForm('#AccountEditModal')"
+              class="list-group-item dropdown-item list-group-item-action selectable no-select"
+            >
+              Edit Account
+            </div>
+            <div
+              class="list-group-item dropdown-item list-group-item-action text-danger selectable no-select"
               @click="logout"
             >
               <i class="mdi mdi-logout"></i>
@@ -75,8 +89,8 @@ export default {
   .picture {
     object-fit: cover;
     object-position: center;
-    height: 4rem;
-    width: 4rem;
+    height: 3.65rem;
+    width: 3.65rem;
     border-radius: 50%;
     // box-shadow: rgba(45, 52, 54, 0.6) 0 0.3rem 1rem 0;
   }

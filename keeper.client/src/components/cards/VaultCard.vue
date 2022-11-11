@@ -20,6 +20,11 @@ export default {
       <div class="gradient d-flex align-items-end">
         <div class="vault-name text-light">{{ vault.name }}</div>
       </div>
+      <i
+        class="fa-solid fa-lock private text-light"
+        title="Private Vault"
+        v-if="vault.isPrivate"
+      ></i>
     </div>
   </router-link>
 </template>
@@ -61,6 +66,20 @@ export default {
       text-shadow: 0.15rem 0.15rem 0 rgba(0, 0, 0, 0.5);
       font-family: "Quando", serif;
     }
+    @media (max-width: 850px) {
+      .vault-name {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .private {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.25rem;
+    padding: 0.35rem 0.45rem;
+    text-shadow: 0 0 0.17rem rgba(0, 0, 0, 0.8);
   }
 }
 </style>

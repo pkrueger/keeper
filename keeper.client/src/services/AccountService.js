@@ -41,6 +41,10 @@ class AccountService {
     AppState.profileKeeps = res.data.map((k) => new Keep(k));
   }
 
+  async updateAccount(accountData) {
+    await api.put(`account`, accountData);
+  }
+
   async clearProfileItems() {
     AppState.activeProfile = null;
     AppState.profileKeeps = [];

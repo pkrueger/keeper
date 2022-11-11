@@ -10,11 +10,6 @@ class KeepsService {
     AppState.keeps = res.data.map((k) => new Keep(k));
   }
 
-  async getKeptKeeps(vaultId) {
-    const res = await api.get(`api/vaults/${vaultId}/keeps`);
-    AppState.keptKeeps = res.data.map((k) => new KeptKeep(k));
-  }
-
   async deleteKeep(keepId) {
     await api.delete(`api/keeps/${keepId}`);
     AppState.keeps = AppState.keeps.filter((k) => k.id != keepId);
@@ -22,23 +17,9 @@ class KeepsService {
     AppState.keptKeeps = AppState.keptKeeps.filter((k) => k.id != keepId);
   }
 
-  async deleteKeptKeep(vaultKeepId) {
-    await api.delete(`api/vaultKeeps/${vaultKeepId}`);
-    AppState.keptKeeps = AppState.keptKeeps.filter(
-      (k) => k.vaultKeepId != vaultKeepId
-    );
-  }
-
   async setActiveKeep(keepId) {
     const res = await api.get(`api/keeps/${keepId}`);
     AppState.activeKeep = new Keep(res.data);
-  }
-
-  async setActiveKeptKeep(keep) {
-    const res = await api.get(
-      `api/vaults/${keep.vaultId}/keeps/${keep.vaultKeepId}`
-    );
-    AppState.activeKeptKeep = new KeptKeep(res.data);
   }
 
   async createKeep(keepData) {

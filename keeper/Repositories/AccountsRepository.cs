@@ -35,13 +35,18 @@ public class AccountsRepository
   internal Account Edit(Account update)
   {
     string sql = @"
-            UPDATE accounts
-            SET 
-              name = @Name,
-              picture = @Picture
-            WHERE id = @Id;";
-    _db.Execute(sql, update);
-    return update;
+              UPDATE accounts SET 
+                name = @Name,
+                picture = @Picture,
+                coverImg = @CoverImg
+              WHERE id = @Id LIMIT 1
+            ;";
+    int rows = _db.Execute(sql, update);
+    if (rows == 0)
+    {
+      throw new Exception("No keep changes were saved.");
+    }
+    return GetById(update.Id);
   }
 
   internal List<Vault> GetVaultsByCreatorId(string creatorId)

@@ -42,7 +42,7 @@ export default {
 .masonry {
   columns: 4;
   column-gap: 1.5rem;
-  padding: 5rem;
+  padding: 10rem 5rem;
 
   .keep-card-comp {
     margin-bottom: 1.5rem;
@@ -59,7 +59,7 @@ export default {
   .masonry {
     columns: 2;
     column-gap: 1rem;
-    padding: 5rem 1rem;
+    padding: 1rem;
 
     .keep-card-comp {
       margin-bottom: 1rem;

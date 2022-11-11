@@ -24,14 +24,6 @@ public class AccountService
     return profile;
   }
 
-  internal Account Edit(Account editData, string userEmail)
-  {
-    Account original = GetProfileByEmail(userEmail);
-    original.Name = editData.Name.Length > 0 ? editData.Name : original.Name;
-    original.Picture = editData.Picture.Length > 0 ? editData.Picture : original.Picture;
-    return _repo.Edit(original);
-  }
-
   internal List<Vault> GetMyVaults(string creatorId)
   {
     List<Vault> vaults = _repo.GetVaultsByCreatorId(creatorId);
@@ -42,5 +34,14 @@ public class AccountService
   {
     List<Keep> keeps = _repo.GetKeepsByCreatorId(creatorId);
     return keeps;
+  }
+
+  internal Account Edit(Account accountData)
+  {
+    Account original = GetOrCreateProfile(accountData);
+    original.Name = accountData.Name.Length > 0 ? accountData.Name : original.Name;
+    original.Picture = accountData.Picture.Length > 0 ? accountData.Picture : original.Picture;
+    original.CoverImg = accountData.CoverImg.Length > 0 ? accountData.CoverImg : original.CoverImg;
+    return _repo.Edit(original);
   }
 }
